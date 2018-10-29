@@ -252,6 +252,13 @@ typedefs.key = Schema.define {
 }
 
 
+typedefs.layer = Schema.define {
+  type = "string",
+  default = "outer",
+  one_of = { "outer", "inner", "any" },
+}
+
+
 setmetatable(typedefs, {
   __index = function(_, k)
     error("schema typedef error: definition " .. k .. " does not exist", 2)

@@ -125,15 +125,15 @@ return {
 
       DO $$
       BEGIN
-        ALTER TABLE IF EXISTS ONLY "plugins" ADD "context" TEXT UNIQUE;
+        ALTER TABLE IF EXISTS ONLY "plugins" ADD "layer" TEXT UNIQUE;
       EXCEPTION WHEN DUPLICATE_COLUMN THEN
         -- Do nothing, accept existing state
       END;
       $$;
 
-      CREATE INDEX IF NOT EXISTS "plugins_context_idx" ON "plugins" ("context");
+      CREATE INDEX IF NOT EXISTS "plugins_layer_idx" ON "plugins" ("layer");
 
-      UPDATE plugins SET context = "non-mtls" WHERE context IS NULL;
+      UPDATE plugins SET layer = "outer" WHERE layer IS NULL;
 
 
       ALTER TABLE IF EXISTS ONLY "apis"
@@ -208,7 +208,7 @@ return {
         route_id uuid,
         service_id uuid,
         consumer_id uuid,
-        context text,
+        layer text,
         name text,
         config text, -- serialized plugin configuration
         enabled boolean,
@@ -252,7 +252,7 @@ return {
           route_id = "uuid",
           service_id = "uuid",
           consumer_id = "uuid",
-          context = "text",
+          layer = "text",
           created_at = "timestamp",
           enabled = "boolean",
           cache_key = "text",
@@ -270,7 +270,7 @@ return {
         consumer_id = "consumer_id",
         created_at = "created_at",
         enabled = "enabled",
-        context = function(row) return "non-mtls" end,
+        layer = function(row) return "outer" end,
         cache_key = function(row)
           return table.concat({
             "plugins",
@@ -298,7 +298,7 @@ return {
           route_id uuid,
           service_id uuid,
           consumer_id uuid,
-          context text,
+          layer text,
           name text,
           config text, -- serialized plugin configuration
           enabled boolean,
@@ -312,7 +312,7 @@ return {
         CREATE INDEX IF NOT EXISTS ON plugins(service_id);
         CREATE INDEX IF NOT EXISTS ON plugins(consumer_id);
         CREATE INDEX IF NOT EXISTS ON plugins(cache_key);
-        CREATE INDEX IF NOT EXISTS ON plugins(context);
+        CREATE INDEX IF NOT EXISTS ON plugins(layer);
       ]]))
 
       plugins_def = {
@@ -325,7 +325,7 @@ return {
           route_id = "uuid",
           service_id = "uuid",
           consumer_id = "uuid",
-          context = "text",
+          layer = "text",
           created_at = "timestamp",
           enabled = "boolean",
           cache_key = "text",
@@ -341,7 +341,7 @@ return {
         route_id = "route_id",
         service_id = "service_id",
         consumer_id = "consumer_id",
-        context = "context",
+        layer = "layer",
         created_at = "created_at",
         enabled = "enabled",
         cache_key = "cache_key",
