@@ -24,7 +24,7 @@ for _, strategy in helpers.each_strategy() do
         hosts = { "logging3.com" },
       }
 
-      bp.plugins:insert {
+      local p = bp.plugins:insert {
         route = { id = route1.id },
         name     = "syslog",
         config   = {
@@ -34,6 +34,8 @@ for _, strategy in helpers.each_strategy() do
           server_errors_severity = "warning",
         },
       }
+
+      error(require("inspect")(p))
 
       bp.plugins:insert {
         route = { id = route2.id },
