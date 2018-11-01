@@ -17,6 +17,7 @@ local REGIONS = {
 return {
   name = "aws-lambda",
   fields = {
+    { layer = typedefs.layer({ one_of = { "outer" } }) },
     { config = {
         type = "record",
         fields = {
