@@ -1,3 +1,6 @@
+PLEASE SEE PR COMMENTS!
+
+
 [![][kong-logo]][kong-url]
 
 [![Build Status][badge-travis-image]][badge-travis-url]
